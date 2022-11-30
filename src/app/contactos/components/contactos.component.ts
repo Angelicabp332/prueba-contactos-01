@@ -5,9 +5,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import {WebcamImage} from 'ngx-webcam';
 import { Observable, Subject } from 'rxjs';
-import { read } from '@popperjs/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ThisReceiver } from '@angular/compiler';
 
 @Component({
   selector: 'app-contactos',
@@ -31,6 +29,8 @@ export class ContactosComponent implements OnInit {
   tel: any = [];
   correo: any = [];
   pagina: any = [];
+  origen:any = [];
+  comentario:any = [];
   dataResp: any;
   seleccionPerson: any = [];
   copiaHistorial:any;
@@ -74,6 +74,12 @@ export class ContactosComponent implements OnInit {
   CargoCambio = this._formBuilder.group({
     CargoCa: ['', Validators.required],
   });
+  ComentarioCambio = this._formBuilder.group({
+    ComentarioCa: ['', Validators.required],
+  });
+  OrigenCambio = this._formBuilder.group({
+    OrigenCa: ['', Validators.required],
+  });
 
   constructor(public modal: NgbModal, private http: HttpClient,
     private _formBuilder: FormBuilder,
@@ -96,8 +102,6 @@ export class ContactosComponent implements OnInit {
 
           let tabla:any = {};
            let unicos = this._historial.filter((indice: any) => {
-            console.log(tabla);
-              console.log(indice);
             return tabla.hasOwnProperty(indice) ? false : (tabla[indice] = true);
           });
 
@@ -122,17 +126,17 @@ export class ContactosComponent implements OnInit {
     { nombre: 'Cargo' }
   ];
 
-  colores = [
-    { value: '#ffcbf9' },
-    { value: '#fae3ff' },
-    { value: '#daffd4' },
-    { value: '#fff5ba' },
-    { value: '#a69afe' },
-    { value: '#afcaff' },
-    { value: '#ffabab' },
-    { value: '#ffb6af' },
-    { value: '#e8ba86' }
-  ];
+  // colores = [
+  //   { value: '#ffcbf9' },
+  //   { value: '#fae3ff' },
+  //   { value: '#daffd4' },
+  //   { value: '#fff5ba' },
+  //   { value: '#a69afe' },
+  //   { value: '#afcaff' },
+  //   { value: '#ffabab' },
+  //   { value: '#ffb6af' },
+  //   { value: '#e8ba86' }
+  // ];
 
 todosLosContactos:any=[];
 empresas:any= [];
@@ -181,8 +185,6 @@ empresas:any= [];
      }
      console.log(this.contactos);
 
-    // console.log( );
-
     document.getElementById("buttonInicio")!.style.display = "none"
   }
 
@@ -194,6 +196,8 @@ empresas:any= [];
     this.tel = [];
     this.correo = [];
     this.pagina = [];
+    this.origen = [];
+    this.comentario = [];
     // this.selctFiltro=[]
 
     for (let person in this.dataResp) {
@@ -209,6 +213,8 @@ empresas:any= [];
           this.tel.push(this.dataResp[person].Personal[a].Tel)
           this.correo.push(this.dataResp[person].Personal[a].Correo)
           this.pagina.push(this.dataResp[person].Personal[a].Pagina)
+          this.origen.push(this.dataResp[person].Personal[a].Origen)
+          this.comentario.push(this.dataResp[person].Personal[a].Comentario)
 
           console.log(this.contactos);
 
@@ -254,10 +260,6 @@ empresas:any= [];
             this.dataResp[person].Personal[a].Credencial]);
 
             console.log(this.pushHistorial)
-
-
-                  // if(!this.historial.includes(this.dataResp[person].Personal[a].Credencial)){
-                    // console.log("No esta repetido");
 
                     this._historial.unshift(this.pushHistorial);
 
@@ -406,6 +408,11 @@ empresas:any= [];
 
   onChangeCambiosNombre(a:any){
     console.log(a);
+    console.log(this.Nombre);
+
+    if( this.Nombre !=0 ){
+
+    }
 
   }
   onChangeCambiosApellido(a:any){
@@ -424,6 +431,15 @@ empresas:any= [];
     console.log(a);
 
   }
+  onChangeCambiosOrigen(a:any){
+    console.log(a);
+
+  }
+  onChangeCambiosComentario(a:any){
+    console.log(a);
+
+  }
+
 
   habilitar = true;
 
@@ -463,7 +479,9 @@ empresas:any= [];
             Tel: this.TelefonoCambio.value.TelefonoCa,
             Correo: this.CorreoCambio.value.CorreoCa,
             Pagina: this.PaginaCambio.value.PaginaCa,
-            Cargo: this.CargoCambio.value.CargoCa
+            Cargo: this.CargoCambio.value.CargoCa,
+            Origen : this.OrigenCambio.value.OrigenCa,
+            Comentario : this.ComentarioCambio.value.ComentarioCa
           });
 
           console.log(this.dataResp[a].Personal);
@@ -500,20 +518,8 @@ empresas:any= [];
     })
    }
 
-  // ActivarCamara(){
-
-  //   console.log("Tomar foto");
-
-  //   if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
-  //     console.log("Let's get this party started")
-  //      navigator.mediaDevices.getUserMedia({video: true} )
-  //     //  this.permisosCam()
-  //   }
-
-  // }
-
- toggleWebcam(): void {
-  this.showWebcam = !this.showWebcam;
+   public toggleWebcam(): void {
+    this.showWebcam = !this.showWebcam;
 }
 
   public archivos:any = [];
