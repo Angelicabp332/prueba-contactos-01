@@ -14,7 +14,6 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatStepperModule} from '@angular/material/stepper';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-import { WebcamModule } from 'ngx-webcam';
 
 @NgModule({
   declarations: [
@@ -32,8 +31,7 @@ import { WebcamModule } from 'ngx-webcam';
     MatButtonModule,
     MatIconModule,
     MatStepperModule,
-    ReactiveFormsModule,
-    WebcamModule
+    ReactiveFormsModule
   ]
 })
 export class ContactosModule { }

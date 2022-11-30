@@ -3,9 +3,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClient } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import {WebcamImage} from 'ngx-webcam';
-import { Observable, Subject } from 'rxjs';
-import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-contactos',
@@ -29,17 +26,13 @@ export class ContactosComponent implements OnInit {
   tel: any = [];
   correo: any = [];
   pagina: any = [];
-  origen:any = [];
-  comentario:any = [];
   dataResp: any;
   seleccionPerson: any = [];
   copiaHistorial:any;
   pushHistorial:any=[];
   public _historial: any[] = [];
-  public webcamImage:any = null;
-  private trigger: Subject<void> = new Subject<void>();
-  public showWebcam = true;
-  public allowCameraSwitch = true;
+
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
   get historial() {
@@ -65,25 +58,9 @@ export class ContactosComponent implements OnInit {
   PaginaCambio = this._formBuilder.group({
     PaginaCa: ['', Validators.required],
   });
-  FotoCambio = this._formBuilder.group({
-    FotoCa: ['', Validators.required],
-  });
-  EmpresaCambio = this._formBuilder.group({
-    EmpresaCa: ['', Validators.required],
-  });
-  CargoCambio = this._formBuilder.group({
-    CargoCa: ['', Validators.required],
-  });
-  ComentarioCambio = this._formBuilder.group({
-    ComentarioCa: ['', Validators.required],
-  });
-  OrigenCambio = this._formBuilder.group({
-    OrigenCa: ['', Validators.required],
-  });
 
   constructor(public modal: NgbModal, private http: HttpClient,
-    private _formBuilder: FormBuilder,
-    private sanitnizer:DomSanitizer) {
+    private _formBuilder: FormBuilder) {
       this._historial = JSON.parse(localStorage.getItem('historial')!) || []
   }
 
@@ -102,6 +79,8 @@ export class ContactosComponent implements OnInit {
 
           let tabla:any = {};
            let unicos = this._historial.filter((indice: any) => {
+            console.log(tabla);
+              console.log(indice);
             return tabla.hasOwnProperty(indice) ? false : (tabla[indice] = true);
           });
 
@@ -126,31 +105,26 @@ export class ContactosComponent implements OnInit {
     { nombre: 'Cargo' }
   ];
 
-  // colores = [
-  //   { value: '#ffcbf9' },
-  //   { value: '#fae3ff' },
-  //   { value: '#daffd4' },
-  //   { value: '#fff5ba' },
-  //   { value: '#a69afe' },
-  //   { value: '#afcaff' },
-  //   { value: '#ffabab' },
-  //   { value: '#ffb6af' },
-  //   { value: '#e8ba86' }
-  // ];
+  colores = [
+    { value: '#ffcbf9' },
+    { value: '#fae3ff' },
+    { value: '#daffd4' },
+    { value: '#fff5ba' },
+    { value: '#a69afe' },
+    { value: '#afcaff' },
+    { value: '#ffabab' },
+    { value: '#ffb6af' },
+    { value: '#e8ba86' }
+  ];
 
 todosLosContactos:any=[];
-empresas:any= [];
   Contactos() {
 
     this.http.get('http://localhost:3000/Contact')
       .subscribe((contact: any) => {
 
         this.dataResp = contact
-        console.log(this.dataResp );
-
         for (let person in contact) {
-          this.empresas.push(contact[person].Empresa);
-
           for (let a in contact[person].Personal) {
 
             this.todosLosContactos.push([contact[person].Personal[a].Nombre,
@@ -185,6 +159,8 @@ empresas:any= [];
      }
      console.log(this.contactos);
 
+    // console.log( );
+
     document.getElementById("buttonInicio")!.style.display = "none"
   }
 
@@ -196,8 +172,6 @@ empresas:any= [];
     this.tel = [];
     this.correo = [];
     this.pagina = [];
-    this.origen = [];
-    this.comentario = [];
     // this.selctFiltro=[]
 
     for (let person in this.dataResp) {
@@ -213,8 +187,6 @@ empresas:any= [];
           this.tel.push(this.dataResp[person].Personal[a].Tel)
           this.correo.push(this.dataResp[person].Personal[a].Correo)
           this.pagina.push(this.dataResp[person].Personal[a].Pagina)
-          this.origen.push(this.dataResp[person].Personal[a].Origen)
-          this.comentario.push(this.dataResp[person].Personal[a].Comentario)
 
           console.log(this.contactos);
 
@@ -260,6 +232,10 @@ empresas:any= [];
             this.dataResp[person].Personal[a].Credencial]);
 
             console.log(this.pushHistorial)
+
+
+                  // if(!this.historial.includes(this.dataResp[person].Personal[a].Credencial)){
+                    // console.log("No esta repetido");
 
                     this._historial.unshift(this.pushHistorial);
 
@@ -358,7 +334,12 @@ empresas:any= [];
     console.log(this.todosLosContactos);
     console.log(this.termino.trim() );
 
+    // this.selctFiltro=[]
+    // let valor = this.txtBuscar.nativeElement.value;
+    // console.log(valor);
+
     this.buscarContactos(this.termino.trim())
+    // this.txtBuscar.nativeElement.value = '';
 
     if(this.termino == 0 || this.termino == ''){
       this.inicio()
@@ -408,11 +389,6 @@ empresas:any= [];
 
   onChangeCambiosNombre(a:any){
     console.log(a);
-    console.log(this.Nombre);
-
-    if( this.Nombre !=0 ){
-
-    }
 
   }
   onChangeCambiosApellido(a:any){
@@ -431,23 +407,13 @@ empresas:any= [];
     console.log(a);
 
   }
-  onChangeCambiosOrigen(a:any){
-    console.log(a);
-
-  }
-  onChangeCambiosComentario(a:any){
-    console.log(a);
-
-  }
-
 
   habilitar = true;
-
   BotonDesabilitado(){
 
     if(this.NombreCambio.value.NombreCa != '' && this.ApellidoCambio.value.ApellidoCa != ''
         && this.TelefonoCambio.value.TelefonoCa != '' && this.CorreoCambio.value.CorreoCa != ''
-        && this.PaginaCambio.value.PaginaCa != '' && this.FotoCambio.value.FotoCa != ''){
+        && this.PaginaCambio.value.PaginaCa != ''){
           console.log("evaluando para habilitar el boton");
           this.habilitar = false
     }else{
@@ -456,154 +422,133 @@ empresas:any= [];
 
   }
 
-  EscogeEmpresa = '';
-
-  onChangeEscogeEmpresa(empresa:any){
-    console.log(empresa);
-    console.log(this.EscogeEmpresa);
-
-  }
   GuardarNewContact(){
-
     console.log("guardar contato");
 
-    for(let a in this.dataResp){
+    this.todosLosContactos.push([this.NombreCambio.value.NombreCa, this.ApellidoCambio.value.ApellidoCa,
+                                this.TelefonoCambio.value.TelefonoCa, this.CorreoCambio.value.CorreoCa,
+                                this.PaginaCambio.value.PaginaCa]);
 
-      if(this.dataResp[a].Empresa == this.EscogeEmpresa){
-        console.log(this.dataResp[a].Personal);
+      console.log(this.todosLosContactos);
 
-        this.dataResp[a].Personal.push(
-          {
-            Nombre : this.NombreCambio.value.NombreCa,
-            Apellido: this.ApellidoCambio.value.ApellidoCa,
-            Tel: this.TelefonoCambio.value.TelefonoCa,
-            Correo: this.CorreoCambio.value.CorreoCa,
-            Pagina: this.PaginaCambio.value.PaginaCa,
-            Cargo: this.CargoCambio.value.CargoCa,
-            Origen : this.OrigenCambio.value.OrigenCa,
-            Comentario : this.ComentarioCambio.value.ComentarioCa
-          });
+  }
 
-          console.log(this.dataResp[a].Personal);
-      }
+  ActivarCamara(){
+
+    console.log("Tomar foto");
+
+    if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
+      console.log("Let's get this party started")
+       navigator.mediaDevices.getUserMedia({video: true} )
     }
 
 
-  }
-
- //Funciones de camara
-  imagenesCam:any = [];
-  triggerSnapshot(): void {
-    this.trigger.next();
-
-   }
-
-   handleImage(webcamImage: WebcamImage): void {
-    console.info('Saved webcam image', webcamImage);
-    this.webcamImage = webcamImage;
-    this.imagenesCam.push(webcamImage)
-     this.procesar()
-   }
-
-   public get triggerObservable(): Observable<void> {
-    return this.trigger.asObservable();
-   }
-
-   animate(){
-    let btn:any  = document.querySelector('.btn.actionBtn.cambiacamara')
-    btn.addEventListener('click', () => {
-      btn.classList.add('animate__animated', 'animate__flipOutY');
-      // setTimeout(() => btn.classList.add('animate__animated animate__flipOutY'), 50)
-    // btn.classList.remove(' animate__animated animate__flipOutY ')
-    })
-   }
-
-   public toggleWebcam(): void {
-    this.showWebcam = !this.showWebcam;
-}
-
-  public archivos:any = [];
-  public previsualizacion:string | undefined;
-
-  ocultarSnapshot(){
-    console.log("Esto es web camm",this.webcamImage);
-    console.log("ocultar foto tomada");
-    this.webcamImage = null;
 
   }
-   archivoCapturado:any;
 
-capturarFile(event:any){
-  console.log(this.archivoCapturado);
+  permisosCam(){
 
- this.archivoCapturado = event.target.files[0]
- this.extraer64(this.archivoCapturado).then((imagen:any) => {
-  console.log(this.previsualizacion);
+    const controls = document.querySelector('.controls');
+    const cameraOptions = document.querySelector('.video-options>select');
+    const video:any = document.querySelector('video');
+    const canvas = document.querySelector('canvas');
+    const screenshotImage = document.querySelector('img');
+    const buttons:any = [controls!.querySelectorAll('button')];
+    const  streamStarted = false;
+    const [play, pause, screenshot] = buttons;
+  // const [play:any, pause, screenshot]
 
-  this.previsualizacion = imagen.base
-  console.log(imagen);
+   const constraints = {
+    video: {
+      width: {
+        min: 1280,
+        ideal: 1920,
+        max: 2560,
+      },
+      height: {
+        min: 720,
+        ideal: 1080,
+        max: 1440
+      },
+    }
+  };
 
- })
-  this.archivos.push(this.archivoCapturado)
-}
+//   cameraOptions!.onchange = () => {
+//     const updatedConstraints = {
+//       ...constraints,
+//       deviceId: {
+//         exact: cameraOptions!.value
+//       }
+//     };
 
-extraer64 = async ($event:any) => new Promise((resolve) =>{
-  try{
-    const unsafeImg = window.URL.createObjectURL($event);
-    const image = this.sanitnizer.bypassSecurityTrustUrl(unsafeImg)
-    const reader = new FileReader();
-    reader.readAsDataURL($event);
-    reader.onload = () => {
-      resolve ({
-        base:reader.result
-      });
-    };
-    reader.onerror = error => {
-      resolve({
-        base:null
-        });
-    };
-  } catch (e){
-    return null;
+//     startStream(updatedConstraints);
+//   };
+// ///////modificada
+//   play.onclick = async () => {
+//     if (streamStarted) {
+//       video!.play();
+//       play.classList.add('d-none');
+//       pause.classList.remove('d-none');
+//       return;
+//     }
+//     if ('mediaDevices' in navigator && await navigator.mediaDevices.getUserMedia()) {
+//       const updatedConstraints = {
+//         ...constraints,
+//         deviceId: {
+//           exact: cameraOptions!.value
+//         }
+//       };
+//       startStream(updatedConstraints);
+//     }
+//   };
+// ///////////
+//   const pauseStream = () => {
+//     video!.pause();
+//     play.classList.remove('d-none');
+//     pause.classList.add('d-none');
+//   };
+
+//   const doScreenshot = () => {
+//     canvas!.width = video!.videoWidth;
+//     canvas!.height = video!.videoHeight;
+//     canvas!.getContext('2d')!.drawImage(video, 0, 0);
+//     screenshotImage!.src = canvas!.toDataURL('image/webp');
+//     screenshotImage!.classList.remove('d-none');
+//   };
+
+//   pause.onclick = pauseStream;
+//   screenshot.onclick = doScreenshot;
+
+//   const startStream = async (constraints: any) => {
+//     const stream = await navigator.mediaDevices.getUserMedia(constraints);
+//     handleStream(stream);
+//   };
+
+
+//   const handleStream = (stream: any) => {
+//     video!.srcObject = stream;
+//     play.classList.add('d-none');
+//     pause.classList.remove('d-none');
+//     screenshot.classList.remove('d-none');
+
+//   };
+
+
+//   const getCameraSelection = async () => {
+//     const devices = await navigator.mediaDevices.enumerateDevices();
+//     const videoDevices = devices.filter(device => device.kind === 'videoinput');
+//     const options = videoDevices.map(videoDevice => {
+//       return `<option value="${videoDevice.deviceId}">${videoDevice.label}</option>`;
+//     });
+//     cameraOptions!.innerHTML = options.join('');
+//   };
+
+//   getCameraSelection();
+
+
   }
-  return null;
-})
 
-subirArchivo():any{
-  try{
-    const formularioDatos = new FormData();
-    this.archivos.forEach((archivo:any) => {
-      formularioDatos.append('files', archivo)
-      console.log(archivo);
 
-    });
-
-    // this.http.post(`http://localhost:3000/Contact`, formularioDatos )
-    // .subscribe(res => {
-    //   console.log("resp servidor", res);
-    // })
-   }
-   catch (e){
-    console.log('Error', e);
-  }
-}
-
-procesar(){
-  console.log(this.webcamImage.imageAsDataUrl);
-}
-
-LimpiarVarCrear(){
-  this.archivoCapturado = undefined
-  this.previsualizacion = undefined
-  console.log(this.NombreCambio.value);
-  console.log(this.FotoCambio.value);
-  this.NombreCambio.value.NombreCa = '';
-  this.ApellidoCambio.value.ApellidoCa = '';
-  this.FotoCambio.value.FotoCa = '';
-  this.TelefonoCambio.value.TelefonoCa = '';
-  this.CorreoCambio.value.CorreoCa = '';
-  this.PaginaCambio.value.PaginaCa = '';
-}
 
 
 }

@@ -1,3 +1,107 @@
+<script>
+  feather.replace();
+
+const controls = document.querySelector('.controls');
+const cameraOptions = document.querySelector('.video-options>select');
+const video = document.querySelector('video');
+const canvas = document.querySelector('canvas');
+const screenshotImage = document.querySelector('img');
+const buttons = [...controls.querySelectorAll('button')];
+let streamStarted = false;
+
+const [play, pause, screenshot] = buttons;
+
+const constraints = {
+  video: {
+    width: {
+      min: 1280,
+      ideal: 1920,
+      max: 2560,
+    },
+    height: {
+      min: 720,
+      ideal: 1080,
+      max: 1440
+    },
+  }
+};
+
+cameraOptions.onchange = () => {
+  const updatedConstraints = {
+    ...constraints,
+    deviceId: {
+      exact: cameraOptions.value
+    }
+  };
+
+  startStream(updatedConstraints);
+};
+
+play.onclick = () => {
+  if (streamStarted) {
+    video.play();
+    play.classList.add('d-none');
+    pause.classList.remove('d-none');
+    return;
+  }
+  if ('mediaDevices' in navigator && navigator.mediaDevices.getUserMedia) {
+    const updatedConstraints = {
+      ...constraints,
+      deviceId: {
+        exact: cameraOptions.value
+      }
+    };
+    startStream(updatedConstraints);
+  }
+};
+
+const pauseStream = () => {
+  video.pause();
+  play.classList.remove('d-none');
+  pause.classList.add('d-none');
+};
+
+const doScreenshot = () => {
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  canvas.getContext('2d').drawImage(video, 0, 0);
+  screenshotImage.src = canvas.toDataURL('image/webp');
+  screenshotImage.classList.remove('d-none');
+};
+
+pause.onclick = pauseStream;
+screenshot.onclick = doScreenshot;
+
+const startStream = async (constraints) => {
+  const stream = await navigator.mediaDevices.getUserMedia(constraints);
+  handleStream(stream);
+};
+
+
+const handleStream = (stream) => {
+  video.srcObject = stream;
+  play.classList.add('d-none');
+  pause.classList.remove('d-none');
+  screenshot.classList.remove('d-none');
+
+};
+
+
+const getCameraSelection = async () => {
+  const devices = await navigator.mediaDevices.enumerateDevices();
+  const videoDevices = devices.filter(device => device.kind === 'videoinput');
+  const options = videoDevices.map(videoDevice => {
+    return `<option value="${videoDevice.deviceId}">${videoDevice.label}</option>`;
+  });
+  cameraOptions.innerHTML = options.join('');
+};
+
+getCameraSelection();
+
+</script>
+<script src="https://unpkg.com/feather-icons"></script>
+<script src="script.js"></script>
+
 <div class="row text-center mt-3 ">
 
   <div>
@@ -141,8 +245,6 @@
           <p><b>Tel: </b> {{tel}}</p>
           <p><b>Correo: </b> {{correo}} </p>
           <p><b>Pagina web: </b> {{pagina}} </p>
-          <p><b>Origen: </b> {{origen}} </p>
-          <p><b>Comentario: </b> {{comentario}} </p>
         </div><br>
 
       </div>
@@ -167,11 +269,11 @@
 
       <div class="modal-body mb-3 mt-3">
             <div class="d-flex justify-content-center ">
-              <button mat-flat-button color="primary" id="btn1" (click)="modal.open(CrearContacto)" (click)="LimpiarVarCrear()">Llenar formulario</button>
+              <button mat-flat-button color="primary" id="btn1" (click)="modal.open(CrearContacto)" >Llenar formulario</button>
             </div>
           <div class="_1rf5"><span class="_1rf8">o</span></div>
           <div class="d-flex justify-content-center ">
-            <button mat-flat-button color="warn" (click)="modal.open(TakePicture)" (click)="ocultarSnapshot()" >Tomar foto</button>
+            <button mat-flat-button color="warn" (click)="modal.open(TakePicture) ">Tomar foto</button>
           </div>
         </div>
     </ng-template>
@@ -261,36 +363,8 @@
             </mat-form-field>
             <div><br>
               <button mat-button matStepperPrevious>Back</button>
-              <button mat-button matStepperNext>Next</button>
             </div>
         </mat-step>
-        <mat-step>
-          <ng-template matStepLabel>Origen</ng-template>
-          <mat-form-field>
-            <input matInput placeholder="Origen"
-                   autocomplete="off"
-                   [(ngModel)]="origen"
-                   (ngModelChange)="onChangeCambiosOrigen($event)"
-                   >
-          </mat-form-field>
-          <div><br>
-            <button mat-button matStepperPrevious>Back</button>
-            <button mat-button matStepperNext>Next</button>
-          </div>
-      </mat-step>
-      <mat-step>
-        <ng-template matStepLabel>Comentario</ng-template>
-        <mat-form-field>
-          <input matInput placeholder="Comentario"
-                 autocomplete="off"
-                 [(ngModel)]="comentario"
-                 (ngModelChange)="onChangeCambiosComentario($event)"
-                 >
-        </mat-form-field>
-        <div><br>
-          <button mat-button matStepperPrevious>Back</button>
-        </div>
-    </mat-step>
           </mat-vertical-stepper>
 
         </div>
@@ -314,7 +388,7 @@
     </div>
     <div class="modal-body">
       <div>
-        <mat-vertical-stepper [linear]="false" #stepper  (click)="BotonDesabilitado()">
+        <mat-vertical-stepper [linear]="false" #stepper   (click)="BotonDesabilitado()">
           <mat-step [stepControl]="NombreCambio" errorMessage="Nombre is required." >
 
             <form [formGroup]="NombreCambio">
@@ -322,7 +396,6 @@
               <mat-form-field>
                 <input matInput
                       autocomplete="off"
-                      type="text"
                       placeholder="Nombre del Usuario"
                       formControlName="NombreCa"
                       required>
@@ -338,7 +411,6 @@
               <mat-form-field>
                 <input matInput placeholder="Apellido"
                        autocomplete="off"
-                       type="text"
                        formControlName="ApellidoCa"
                        required>
               </mat-form-field>
@@ -354,7 +426,6 @@
               <mat-form-field>
                 <input matInput placeholder="Telefono"
                        autocomplete="off"
-                       type="number"
                        formControlName="TelefonoCa"
                        required>
               </mat-form-field>
@@ -370,7 +441,6 @@
             <mat-form-field>
               <input matInput placeholder="Correo"
                      autocomplete="off"
-                     type="email"
                      formControlName="CorreoCa"
                      required>
             </mat-form-field>
@@ -384,102 +454,18 @@
           <form [formGroup]="PaginaCambio">
           <ng-template matStepLabel> Pagina web</ng-template>
           <mat-form-field>
-
             <input matInput placeholder="Pagina"
-            autocomplete="off"
-            formControlName="PaginaCa"
-            required>
+                   autocomplete="off"
+                   formControlName="PaginaCa"
+                   required>
 
           </mat-form-field>
           <div><br>
             <button mat-button matStepperPrevious>Back</button>
-            <button mat-button matStepperNext>Next</button>
           </div>
         </form>
       </mat-step>
-      <mat-step [stepControl]="CargoCambio" errorMessage="Cargo is required.">
-        <form [formGroup]="CargoCambio">
-        <ng-template matStepLabel>Cargo</ng-template>
-        <mat-form-field>
-
-          <input matInput placeholder="Cargo"
-          autocomplete="off"
-          formControlName="CargoCa"
-          required>
-
-        </mat-form-field>
-        <div><br>
-          <button mat-button matStepperPrevious>Back</button>
-          <button mat-button matStepperNext>Next</button>
-        </div>
-      </form>
-    </mat-step>
-      <mat-step [stepControl]="EmpresaCambio" errorMessage="Empresa is required.">
-        <!-- <form > -->
-        <ng-template matStepLabel> Empresa </ng-template>
-        <!-- <mat-form-field> -->
-          <mat-radio-group
-              [(ngModel)]="EscogeEmpresa"
-              (ngModelChange)="onChangeEscogeEmpresa($event)">
-          <mat-radio-button value="{{item}}" *ngFor="let item of empresas"> {{item | titlecase}} </mat-radio-button>
-        </mat-radio-group>
-        <!-- </mat-form-field> -->
-        <div><br>
-          <button mat-button matStepperPrevious>Back</button>
-        </div>
-      <!-- </form> -->
-    </mat-step>
-    <mat-step [stepControl]="OrigenCambio" errorMessage="Origen is required.">
-      <form [formGroup]="OrigenCambio">
-      <ng-template matStepLabel>Origen</ng-template>
-      <mat-form-field>
-
-        <input matInput placeholder="Origen"
-        autocomplete="off"
-        formControlName="OrigenCa"
-        required>
-
-      </mat-form-field>
-      <div><br>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext>Next</button>
-      </div>
-    </form>
-  </mat-step>
-  <mat-step [stepControl]="ComentarioCambio" errorMessage="Cometario is required.">
-    <form [formGroup]="ComentarioCambio">
-    <ng-template matStepLabel>Cometario</ng-template>
-    <mat-form-field>
-
-      <input matInput placeholder="Cometario"
-      autocomplete="off"
-      formControlName="ComentarioCa"
-      required>
-
-    </mat-form-field>
-    <div><br>
-      <button mat-button matStepperPrevious>Back</button>
-      <button mat-button matStepperNext>Next</button>
-    </div>
-  </form>
-</mat-step>
         </mat-vertical-stepper>
-        <form [formGroup]="FotoCambio">
-          <div id="contenedor" class="d-flex justify-content-center mt-3">
-            <input (change)="capturarFile($event)"
-                    type="file"
-                    name="archivo"
-                    id="imagen"
-                    formControlName="FotoCa">
-          </div>
-          <div id="preview" class="d-flex justify-content-center " *ngIf="previsualizacion">
-            <img class="imgSubidaPorUser rainbow mt-3" [src]="previsualizacion">
-          </div>
-          <div class="d-flex justify-content-center mt-3">
-            <button mat-raised-button (click)="subirArchivo()" (click)="BotonDesabilitado()">Subir Archivo</button>
-          </div>
-        </form>
-
       </div>
     </div>
 
@@ -490,28 +476,27 @@
   </div>
 
 
-<div class="d-flex justify-content-center">
-  <ng-template #TakePicture>
-  <webcam [height]="400"
-          [width]="1000"
-          [trigger]="triggerObservable"
-          (imageCapture)="handleImage($event)"
-          *ngIf="showWebcam"
-          [allowCameraSwitch]="allowCameraSwitch"
-          >
-   </webcam>
+  <div class="display-cover">
+    <ng-template #TakePicture>
+    <video autoplay></video>
+    <canvas class="d-none"></canvas>
 
-   <button class="btn  actionBtn play"
-            (click)="triggerSnapshot()">
-    <img id="IcoCamara" src="../../../assets/Ghenova/camara.png"></button>
+    <div class="video-options">
+        <select name="" id="" class="custom-select">
+            <option value="">Select camera</option>
+        </select>
+    </div>
 
-    <button class="btn actionBtn cambiacamara"  (click)="toggleWebcam();"><img class="CambiaCam" src="../../../assets/Ghenova/cambiar-de-camara.png"> </button>
+    <img class="screenshot-image d-none" alt="">
 
-  <div class="snapshot" id="snapshotID" *ngIf="webcamImage">
-    <!-- style="display: inline" -->
-    <img class="imagensnapshot" [src]="webcamImage.imageAsDataUrl"/>
-  </div>
-</ng-template>
+    <div class="controls">
+        <button class="btn btn-danger play" title="Play"><i data-feather="play-circle"></i></button>
+        <button class="btn btn-info pause d-none" title="Pause"><i data-feather="pause"></i></button>
+        <button class="btn btn-outline-success screenshot d-none" title="ScreenShot"><i data-feather="image"></i></button>
+    </div>
+  </ng-template>
+</div>
+
     </div>
 
 
@@ -521,4 +506,3 @@
                      formControlName="Correo"
                      (ngModelChange)="onChangeCambiosCorreo($event)"
                      required> -->
-</div>

@@ -313,8 +313,7 @@ button.mat-focus-indicator.mat-raised-button.mat-button-base.mat-primary{
 
 
 /* Camara */
-
-/* .screenshot-image {
+.screenshot-image {
   width: 150px;
   height: 90px;
   border-radius: 4px;
@@ -419,87 +418,4 @@ video {
 
 .controls > button:hover svg {
   color: white;
-} */
-
-button.btn.actionBtn.play{
-  position: absolute;
-  width: 100px;
-  bottom: 20px;
-  left: 40%;
-
-}
-
-webcam{
-  height: 400px;
- left: 0;
-}
-
-.snapshot{
-  position: absolute;
-  left: 0px;
-  bottom: 0px;
-  /* width: 50px;
-  height: 50px; */
-  transform: scaleX(-1);
-}
-
-/* .imagensnapshot{
-   width: 180px;
-  height: 130px;
-} */
-
-#IcoCamara{
-  width: 40px;
-  height: 40px;
-}
-
- .imagensnapshot{
-  width: 180px;
-  height: 130px;
-  border-radius: 4px;
-  border: 2px solid whitesmoke;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
-  bottom: 5px;
-  background: white;
-}
-
-button.btn.actionBtn.cambiacamara{
- width: 50px;
- height: 50px;
- padding: 20px;
-}
-
-.CambiaCam{
-  height: 40px;
-  width: 40px;
-}
-
-button.mat-focus-indicator.mat-raised-button.mat-button-base{
-  position: relative;
-  width: 120px;
-}
-
-img.imgSubidaPorUser{
-  width: 300px;
-  height: 200px;
-  padding: 20px;
-  /* border: dashed #B5E5ED; */
-}
-
-
-/* div.modal-dialog{
-  top: 200px !important;
-}
-
-div.modal-content{
-  top: 200px !important;
-}
-
-ngb-modal-window.d-block.modal.fade.show{
-  top: 200px !important;
-} */
-
-img.imgSubidaPorUser.rainbow.mt-3{
-  border-style: dashed ;
-  border-color: #8aacc8 ;
 }
