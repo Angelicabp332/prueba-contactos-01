@@ -1,0 +1,583 @@
+<!-- <script>
+  feather.replace();
+
+const controls = document.querySelector('.controls');
+const cameraOptions = document.querySelector('.video-options>select');
+const video = document.querySelector('video');
+const canvas = document.querySelector('canvas');
+const screenshotImage = document.querySelector('img');
+const buttons = [...controls.querySelectorAll('button')];
+let streamStarted = false;
+
+const [play, pause, screenshot] = buttons;
+
+const constraints = {
+  video: {
+    width: {
+      min: 1280,
+      ideal: 1920,
+      max: 2560,
+    },
+    height: {
+      min: 720,
+      ideal: 1080,
+      max: 1440
+    },
+  }
+};
+
+cameraOptions.onchange = () => {
+  const updatedConstraints = {
+    ...constraints,
+    deviceId: {
+      exact: cameraOptions.value
+    }
+  };
+
+  startStream(updatedConstraints);
+};
+
+play.onclick = () => {
+  if (streamStarted) {
+    video.play();
+    play.classList.add('d-none');
+    pause.classList.remove('d-none');
+    return;
+  }
+  if ('mediaDevices' in navigator && navigator.mediaDevices.getUserMedia) {
+    const updatedConstraints = {
+      ...constraints,
+      deviceId: {
+        exact: cameraOptions.value
+      }
+    };
+    startStream(updatedConstraints);
+  }
+};
+
+const pauseStream = () => {
+  video.pause();
+  play.classList.remove('d-none');
+  pause.classList.add('d-none');
+};
+
+const doScreenshot = () => {
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  canvas.getContext('2d').drawImage(video, 0, 0);
+  screenshotImage.src = canvas.toDataURL('image/webp');
+  screenshotImage.classList.remove('d-none');
+};
+
+pause.onclick = pauseStream;
+screenshot.onclick = doScreenshot;
+
+const startStream = async (constraints) => {
+  const stream = await navigator.mediaDevices.getUserMedia(constraints);
+  handleStream(stream);
+};
+
+
+const handleStream = (stream) => {
+  video.srcObject = stream;
+  play.classList.add('d-none');
+  pause.classList.remove('d-none');
+  screenshot.classList.remove('d-none');
+
+};
+
+
+const getCameraSelection = async () => {
+  const devices = await navigator.mediaDevices.enumerateDevices();
+  const videoDevices = devices.filter(device => device.kind === 'videoinput');
+  const options = videoDevices.map(videoDevice => {
+    return `<option value="${videoDevice.deviceId}">${videoDevice.label}</option>`;
+  });
+  cameraOptions.innerHTML = options.join('');
+};
+
+getCameraSelection();
+
+</script> -->
+<!-- <script src="https://unpkg.com/feather-icons"></script>
+<script src="script.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
+
+<div class="row text-center mt-3 ">
+
+  <div>
+    <img class="bi me-2 logo" width="220"
+          height="50"
+          role="img"
+          src="../../../../assets/Ghenova/logo-ghenova.png">
+    <hr>
+  </div>
+
+  <!-- <div class="d-flex  justify-content-center mt-5 mb-5" >
+
+      <input type="text"
+            placeholder="Buscar Contacto......"
+            #txtBuscar
+            class="form-control input-group"
+            (keyup.enter)="buscar()" >
+      <span class="input-group-append td d-flex justify-content-start" id="s-cover">
+          <button type="submit"
+                  (click)="buscar()">
+            <div id="s-circle"></div>
+            <span></span>
+          </button>
+      </span>
+</div> -->
+
+<div class="d-flex  justify-content-center mt-5 mb-5" >
+<mat-form-field>
+  <input type="text" #txtBuscar
+             placeholder="Buscar Contacto......"
+             aria-label="Number"
+             matInput
+             [(ngModel)]="termino"
+             [matAutocomplete]="auto"
+             (input)="buscar()">
+      <mat-autocomplete autoActiveFirstOption
+      #auto="matAutocomplete">
+
+        <mat-option value="" *ngIf="contactos.length == 0 ">
+          No se encontro nada con el termino {{ termino }}
+        </mat-option>
+
+        <!-- <mat-option value="" *ngIf="contactos.length == 0 && termino.length.trim() > 0">
+          No se encontro nada con el termino {{ termino }}
+        </mat-option> -->
+
+      </mat-autocomplete>
+
+    </mat-form-field>
+
+    <span class="input-group-append td d-flex justify-content-start" id="s-cover">
+      <button class="botonBusqueda" type="submit"
+              (click)="buscar()">
+        <div id="s-circle"></div>
+        <span></span>
+      </button>
+  </span>
+
+
+
+
+</div>
+
+<div class="boxFilter mb-5 d-flex justify-content-center"  #buttonInicio *ngIf="checkSeleccion >= 0 " >
+  <button mat-raised-button color="warn" id="buttonInicio" (click)="inicio()">Volver</button>
+</div>
+
+
+
+<div class="col ">
+
+    <div class=" mt-4 mb-5 d-flex justify-content-center" >
+      <div>
+        <mat-radio-group [(ngModel)]="checkSeleccion" >
+          <mat-radio-button class="example-radio-button" *ngFor="let item of filtrarPor "
+            (click)="onChangeCheckBox(item.nombre)">
+            <b> {{item.nombre }} </b>
+          </mat-radio-button>
+        </mat-radio-group>
+      </div>
+
+    </div>
+
+    <!-- else cardsFilter; -->
+
+      <div class="box mt-5 "  [(ngModel)]="seleccionPerson" ngDefaultControl *ngIf="(Filter==0 || selctFiltro!=0 );else cardsFilter" >
+        <mat-card *ngFor="let item of contactos" class="cards mb-3 contieneCards"  (click)="onSelectPerson(item[3])" (click)="DatosContactos()"
+                  (click)="modal.open(modalCont)" (click)="agregaHistorialSeleccionado()">
+
+          <img src="/assets/Ghenova/usuario.png" id="imgUsuario">
+          {{item[0] | titlecase}} {{item[1] | titlecase}}<br><br>
+          <b> Cargo: </b>{{item[2] | titlecase}}
+        </mat-card>
+      </div>
+
+        <ng-template class="boxFilter mb-5" #cardsFilter [(ngModel)]="selctFiltro" ngDefaultControl>
+          <div class="row cardPre box mb-5 d-flex " *ngFor="let item of Filter"  (click)="onSelectFilter(item)">
+              <div class="card">
+                  <h5 class="card-title">{{item | titlecase}}</h5>
+              </div>
+        </div>
+        </ng-template>
+
+        <div class="mb-5 mt-3 d-flex justify-content-center cargando " *ngIf="_historial.length == 0 && Filter==0">
+          <div class="text-center ">
+            <img class="bi me-2 iconoInicial" role="img"
+              src="../../../assets/Ghenova/undraw_people_search_re_5rre.svg"> <br /> <br />
+          </div>
+        </div>
+
+        <!-- <a href="#" class="btn-flotante">Llamada a la acción</a> -->
+
+        <button mat-fab color="accent" class="btn-flotante" (click)="modal.open(NuevoContact)">
+          <mat-icon>add</mat-icon>
+        </button>
+
+  </div>
+
+  <!-----------Informacion del contacto----------------------->
+  <div class="MostrarEvento">
+    <ng-template #modalCont let-close="close" >
+
+      <div class="modal-header d-flex justify-content-start">
+        <div class="d-flex justify-content-start">
+          <h5 class="modal-title "> Informacion {{seleccionPerson}} </h5>
+        </div>
+      </div>
+
+      <div class="modal-body d-flex justify-content-between">
+
+        <div class="col">
+          <picture class="rounded">
+            <img src="../../../assets/Ghenova/farmaceutico-removebg-preview.png" class="img-fluid img-thumbnail" width="140px;" alt="...">
+          </picture>
+        </div>
+
+        <div class="col">
+
+          <p><b>Nombre: </b> {{Nombre }} </p>
+          <p><b>Apellido: </b> {{Apellido }} </p>
+          <p><b>Tel: </b> {{tel}}</p>
+          <p><b>Correo: </b> {{correo}} </p>
+          <p><b>Pagina web: </b> {{pagina}} </p>
+        </div><br>
+
+      </div>
+
+      <div class="modal-footer d-flex justify-content-center" >
+        <button type="button" class="btn btn-outline-warning btnEditar" (click)="modal.open(EditarContacto)">
+          <mat-icon>create</mat-icon>
+        </button>
+      </div>
+
+    </ng-template>
+  </div>
+
+<!--------------Opciones para Crear nuevo contacto------------------->
+  <div class="NuevoContact">
+    <ng-template #NuevoContact let-close="close" >
+      <div class="modal-header d-flex justify-content-center">
+        <div class="d-flex justify-content-start">
+          <h5 class="modal-title "> Crear nuevo contacto </h5>
+        </div>
+      </div>
+
+      <div class="modal-body mb-3 mt-3">
+            <div class="d-flex justify-content-center ">
+              <button mat-flat-button color="primary" id="btn1" (click)="modal.open(CrearContacto)" (click)="LimpiarVarCrear()">Llenar formulario</button>
+            </div>
+          <div class="_1rf5"><span class="_1rf8">o</span></div>
+          <div class="d-flex justify-content-center ">
+            <button mat-flat-button color="warn" (click)="modal.open(TakePicture)" (click)="ocultarSnapshot()" >Tomar foto</button>
+          </div>
+        </div>
+    </ng-template>
+  </div>
+
+
+  <!----------------------Editar informacion de contacto------------------------------------------->
+  <div class="EditarContacto">
+    <ng-template #EditarContacto let-close="close" class="EditarContacto">
+      <div class="modal-header">
+
+        <h5 class="modal-title "> <img class="bi me-2 " width="50" height="50" role="img"
+          src="../../../../assets/Ghenova/editar.png"> Editar Informacion {{seleccionPerson}}</h5>
+        <button type="button" class="btn btn-outline-danger close " (click)="close()">
+          <!-- <span aria-hidden="true">&times;</span> -->
+          <mat-icon class="iconoclose">clear</mat-icon>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div>
+          <mat-vertical-stepper [linear]="false" #stepper>
+            <mat-step >
+
+                <ng-template matStepLabel>Editar Nombre</ng-template>
+                <mat-form-field>
+                  <input matInput
+                        autocomplete="off"
+                        placeholder="Nombre del Usuario"
+                        [(ngModel)]="Nombre"
+                        (ngModelChange)="onChangeCambiosNombre($event)"
+                        >
+                </mat-form-field>
+                <div>
+                  <button mat-button matStepperNext>Next</button>
+                </div>
+            </mat-step>
+            <mat-step >
+                <ng-template matStepLabel>Editar Apellido</ng-template>
+                <mat-form-field>
+                  <input matInput placeholder="Apellido"
+                         autocomplete="off"
+                         [(ngModel)]="Apellido"
+                         (ngModelChange)="onChangeCambiosApellido($event)"
+                         >
+                </mat-form-field>
+                <div class="d-flex justify-content-start">
+                  <button mat-button matStepperPrevious>Back</button>
+                  <button mat-button matStepperNext>Next</button>
+                </div>
+            </mat-step>
+            <mat-step>
+                <ng-template matStepLabel>Editar Telefono</ng-template>
+                <mat-form-field>
+                  <input matInput placeholder="Telefono"
+                         autocomplete="off"
+                         [(ngModel)]="tel"
+                         (ngModelChange)="onChangeCambiosTelefono($event)"
+                         >
+                </mat-form-field>
+                <div class="d-flex justify-content-start"><br>
+                  <button mat-button matStepperPrevious>Back</button>
+                  <button mat-button matStepperNext>Next</button>
+                </div>
+            </mat-step>
+            <mat-step>
+              <ng-template matStepLabel>Editar Correo</ng-template>
+              <mat-form-field>
+                <input matInput placeholder="Correo"
+                       autocomplete="off"
+                       [(ngModel)]="correo"
+                       (ngModelChange)="onChangeCambiosCorreo($event)"
+                       >
+              </mat-form-field>
+              <div class="d-flex justify-content-start"><br>
+                <button mat-button matStepperPrevious>Back</button>
+                <button mat-button matStepperNext>Next</button>
+              </div>
+          </mat-step>
+          <mat-step>
+            <ng-template matStepLabel>Editar Pagina web</ng-template>
+            <mat-form-field>
+              <input matInput placeholder="Pagina"
+                     autocomplete="off"
+                     [(ngModel)]="pagina"
+                     (ngModelChange)="onChangeCambiosPagina($event)"
+                     >
+            </mat-form-field>
+            <div><br>
+              <button mat-button matStepperPrevious>Back</button>
+            </div>
+        </mat-step>
+          </mat-vertical-stepper>
+
+        </div>
+
+      </div>
+      </ng-template>
+      </div>
+
+
+
+<!----------------------crear nuevo contacto------------------------------------------->
+<div class="CrearContacto" id="CrearContacto">
+  <ng-template #CrearContacto let-close="close" class="CrearContacto" data-backdrop="static" data-keyboard="false">
+    <div class="modal-header">
+
+      <h5 class="modal-title "> <img class="bi me-2 " width="50" height="50" role="img"
+        src="../../../assets/Ghenova/agregar-usuario.png">Crear Nuevo Contacto</h5>
+      <button type="button" class="btn btn-outline-danger close " (click)="close()">
+        <mat-icon class="iconoclose">clear</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <mat-vertical-stepper [linear]="false" #stepper  (click)="BotonDesabilitado()">
+          <mat-step [stepControl]="NombreCambio" errorMessage="Nombre is required." >
+
+            <form [formGroup]="NombreCambio">
+              <ng-template matStepLabel> Nombre</ng-template>
+              <mat-form-field>
+                <input matInput
+                      autocomplete="off"
+                      placeholder="Nombre del Usuario"
+                      formControlName="NombreCa"
+                      required>
+              </mat-form-field>
+              <div>
+                <button mat-button matStepperNext>Next</button>
+              </div>
+            </form>
+          </mat-step >
+          <mat-step [stepControl]="ApellidoCambio" errorMessage="Apellido is required." >
+            <form [formGroup]="ApellidoCambio">
+              <ng-template matStepLabel> Apellido</ng-template>
+              <mat-form-field>
+                <input matInput placeholder="Apellido"
+                       autocomplete="off"
+                       formControlName="ApellidoCa"
+                       required>
+              </mat-form-field>
+              <div class="d-flex justify-content-start">
+                <button mat-button matStepperPrevious>Back</button>
+                <button mat-button matStepperNext>Next</button>
+              </div>
+            </form>
+          </mat-step>
+          <mat-step [stepControl]="TelefonoCambio" errorMessage="Telefono is required.">
+            <form [formGroup]="TelefonoCambio">
+              <ng-template matStepLabel> Telefono</ng-template>
+              <mat-form-field>
+                <input matInput placeholder="Telefono"
+                       autocomplete="off"
+                       formControlName="TelefonoCa"
+                       required>
+              </mat-form-field>
+              <div class="d-flex justify-content-start"><br>
+                <button mat-button matStepperPrevious>Back</button>
+                <button mat-button matStepperNext>Next</button>
+              </div>
+              </form>
+          </mat-step>
+          <mat-step [stepControl]="CorreoCambio" errorMessage="Correo is required.">
+            <form [formGroup]="CorreoCambio">
+            <ng-template matStepLabel> Correo</ng-template>
+            <mat-form-field>
+              <input matInput placeholder="Correo"
+                     autocomplete="off"
+
+                     formControlName="CorreoCa"
+                     required>
+            </mat-form-field>
+            <div class="d-flex justify-content-start"><br>
+              <button mat-button matStepperPrevious>Back</button>
+              <button mat-button matStepperNext>Next</button>
+            </div>
+            </form>
+        </mat-step>
+        <mat-step [stepControl]="PaginaCambio" errorMessage="Pagina is required.">
+          <form [formGroup]="PaginaCambio">
+          <ng-template matStepLabel> Pagina web</ng-template>
+          <mat-form-field>
+
+            <input matInput placeholder="Pagina"
+            autocomplete="off"
+            formControlName="PaginaCa"
+            required>
+
+          </mat-form-field>
+          <div><br>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button matStepperNext>Next</button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step [stepControl]="CargoCambio" errorMessage="Cargo is required.">
+        <form [formGroup]="CargoCambio">
+        <ng-template matStepLabel>Cargo</ng-template>
+        <mat-form-field>
+
+          <input matInput placeholder="Cargo"
+          autocomplete="off"
+          formControlName="CargoCa"
+          required>
+
+        </mat-form-field>
+        <div><br>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-step>
+      <mat-step [stepControl]="EmpresaCambio" errorMessage="Empresa is required.">
+        <!-- <form > -->
+        <ng-template matStepLabel> Empresa </ng-template>
+        <!-- <mat-form-field> -->
+          <mat-radio-group
+              [(ngModel)]="EscogeEmpresa"
+              (ngModelChange)="onChangeEscogeEmpresa($event)">
+          <mat-radio-button value="{{item}}" *ngFor="let item of empresas"> {{item | titlecase}} </mat-radio-button>
+        </mat-radio-group>
+        <!-- </mat-form-field> -->
+        <div><br>
+          <button mat-button matStepperPrevious>Back</button>
+        </div>
+      <!-- </form> -->
+    </mat-step>
+        </mat-vertical-stepper>
+        <form [formGroup]="FotoCambio">
+          <div id="contenedor" class="d-flex justify-content-center mt-3">
+            <input (change)="capturarFile($event)"
+                    type="file"
+                    name="archivo"
+                    id="imagen"
+                    formControlName="FotoCa">
+          </div>
+          <div id="preview" class="d-flex justify-content-center " *ngIf="previsualizacion">
+            <img class="imgSubidaPorUser rainbow mt-3" [src]="previsualizacion">
+          </div>
+          <div class="d-flex justify-content-center mt-3">
+            <button mat-raised-button (click)="subirArchivo()" (click)="BotonDesabilitado()">Subir Archivo</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button mat-raised-button color="primary" (click)="GuardarNewContact()" (click)="close()" [disabled]="habilitar">Crear</button>
+    </div>
+  </ng-template>
+  </div>
+
+
+  <!-- <div class="display-cover">
+
+    <video autoplay></video>
+    <canvas class="d-none"></canvas>
+
+    <div class="video-options">
+        <select name="" id="" class="custom-select">
+            <option value="">Select camera</option>
+        </select>
+    </div>
+
+    <img class="screenshot-image d-none" alt="">
+
+    <div class="controls">
+        <button class="btn btn-danger play" title="Play"><i data-feather="play-circle"></i></button>
+        <button class="btn btn-info pause d-none" title="Pause"><i data-feather="pause"></i></button>
+        <button class="btn btn-outline-success screenshot d-none" title="ScreenShot"><i data-feather="image"></i></button>
+    </div>
+
+</div> -->
+
+<div class="d-flex justify-content-center">
+  <ng-template #TakePicture>
+  <webcam [height]="400"
+          [width]="1000"
+          [trigger]="triggerObservable"
+          (imageCapture)="handleImage($event)"
+          *ngIf="showWebcam"
+          [allowCameraSwitch]="allowCameraSwitch"
+          >
+   </webcam>
+
+   <button class="btn  actionBtn play"
+            (click)="triggerSnapshot()">
+    <img id="IcoCamara" src="../../../assets/Ghenova/camara.png"></button>
+
+    <!-- <button class="btn actionBtn cambiacamara"  (click)="toggleWebcam();"><img class="CambiaCam" src="../../../assets/Ghenova/cambiar-de-camara.png"> </button> -->
+
+  <div class="snapshot" id="snapshotID" *ngIf="webcamImage">
+    <!-- style="display: inline" -->
+    <img class="imagensnapshot" [src]="webcamImage.imageAsDataUrl"/>
+  </div>
+</ng-template>
+    </div>
+
+
+    <!-- <input matInput placeholder="Correo"
+                     autocomplete="off"
+                     [(ngModel)]="correo"
+                     formControlName="Correo"
+                     (ngModelChange)="onChangeCambiosCorreo($event)"
+                     required> -->
+</div>

@@ -1,0 +1,88 @@
+<div class="row text-center mt-3 contenedorInicialBliblio">
+
+  <div>
+    <img class="bi me-2 logo" width="220"
+          height="50"
+          role="img"
+          src="../../../../assets/Ghenova/logo-ghenova.png">
+    <hr>
+  </div>
+
+  <div class="etiquetasBiblio col-md-3">
+    <app-etiquetas-bilio (documento)="buscar($event)"
+                         (filtro)="filtrarPor($event)">
+    </app-etiquetas-bilio>
+  </div>
+
+  <ng-template #inicio>
+    <div class="text-center cargando">
+      <img class="bi me-2 iconoInicial" role="img"
+        src="../../../../assets/Ghenova/undraw_Happy_announcement_re_tsm0.png"> <br /> <br />
+    </div>
+  </ng-template>
+
+  <div class="col">
+    <div class="box " *ngIf="(docsEtiquetas1!=0); else inicio">
+
+      <div class="container" *ngFor="let item of docsEtiquetas1"
+            (click)="cuandohaceClick( item[0])">
+
+
+        <!-- <div class="estanteria mt-3" [style.background-color]="item[1].color">
+
+          <h2 class="mt-2"> {{item[0]}}</h2>
+          <br>
+          <hr class="divisorEstante">
+            <br>
+            <br>
+          <hr class="divisorEstante">
+          <br>
+          <br>
+          <hr class="divisorEstante">
+
+        </div> -->
+
+        <!-- <div class="estanteria mt-3" [style.background-color]="item[1].color">
+
+          <h2 class="mt-2"> {{item[0]}}</h2>
+          <hr class="divisorEstante">
+          <div class="divilibro col ">
+            <div class="libro1">  </div>
+            <div class="libro2">  </div>
+          </div>
+          <hr class="divisorEstante">
+          <br>
+          <br>
+          <hr class="divisorEstante">
+
+        </div> -->
+
+        <div class="estanteria mt-3" [style.background-color]="item[1].color">
+
+          <h2 class="mt-2"> {{item[0]}}</h2>
+          <hr class="divisorEstante">
+          <div class="divilibro col ">
+            <hr class="libro1">
+            <hr class="libro2">
+          </div>
+
+          <hr class="divisorEstante">
+
+          <div class="divilibrorow col ">
+            <div class=" row divilibroRow ">
+              <hr class="libro1row">
+              <hr class="libro2row">
+              <hr class="libro1row">
+            </div>
+            <br>
+            <hr class="libro2row">
+        </div>
+          <hr class="divisorEstante">
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>

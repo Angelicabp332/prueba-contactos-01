@@ -1,0 +1,34 @@
+<div class="container text-center">
+
+  <div class="list-group list-reset mt-5 agruparPor">
+
+    <h5>Agrupar Por:</h5>
+    <button *ngFor="let item of agruparPor; let i = index"
+        class="list-group-item list-group-item-action Etiquetas "
+       (click)="buscarDocs(item.nombre, i)"
+        name="Etiquetas"
+       [ngClass]="{'active':activate === i}"
+      (click)="ClickChange()"
+       required
+       id="filtro1">
+      {{item.nombre}}
+    </button>
+
+  </div>
+
+  <div class="list-group list-reset mt-5">
+
+    <h5> Ver:</h5>
+    <button *ngFor="let item of verPor; let i = index"
+        class="list-group-item list-group-item-action  EtiquetasVer"
+        [ngClass]="{'active':activatefilter === i}"
+        (click)="filtrarDocs(item.nombre, i)"
+        name="EtiquetasVer"
+        [disabled] = "cambiante"
+        id="filtro2">
+      {{item.nombre}}
+    </button>
+
+  </div>
+
+</div>

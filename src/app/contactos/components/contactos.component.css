@@ -1,0 +1,505 @@
+.form-control{
+  width: 600px;
+  /* background-color: #ede7f6; */
+  border-radius: 40px;
+}
+
+button {
+  /* display: grid; */
+  position: absolute;
+  display: block;
+  width: 40px;
+  height: 37px;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+
+}
+
+/* #s-cover {
+  width: 1px;
+  padding-left: initial;
+} */
+
+#s-circle {
+  position: relative;
+  top: -8px;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  margin-top: 0;
+  border-width: 15px;
+  border: 3px solid #0086c3;
+  background-color: transparent;
+  border-radius: 50%;
+  transition: 0.5s ease all;
+}
+
+button span {
+  position: absolute;
+  top: 20px;
+  left: 28px;
+  display: block;
+  width: 8px;
+  height: 15px;
+  background-color: transparent;
+  border-radius: 10px;
+  transform: rotateZ(52deg);
+  transition: 0.5s ease all;
+}
+
+button span:before,
+button span:after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 20px;
+  height: 7px;
+  background-color: #0086c3;
+  border-radius: 8px;
+  transform: rotateZ(0);
+  transition: 0.5s ease all;
+}
+
+#s-cover:hover #s-circle {
+  top: -1px;
+  width: 20px;
+  height: 8px;
+  border-width: 0;
+  background-color: #0086c3;
+  border-radius: 20px;
+}
+
+#s-cover:hover span {
+  top: 50%;
+  left: 0px;
+  width: 38px;
+  margin-top: -17px;
+  transform: rotateZ(0);
+}
+
+#s-cover:hover button span:before {
+  bottom: 1px;
+  transform: rotateZ(52deg);
+}
+
+#s-cover:hover button span:after {
+  bottom: -11px;
+  transform: rotateZ(-52deg);
+}
+#s-cover:hover button span:before,
+#s-cover:hover button span:after {
+  right: -6px;
+  width: 20px;
+  background-color: #0086c3;
+}
+
+picture{
+  padding: 0px 20px;
+}
+
+.infoUsuario{
+  margin-top: 80px;
+}
+
+ul {
+  list-style: none;
+}
+
+li {
+  padding: 8px;
+}
+
+mat-radio-button{
+  margin-left: 70px ;
+  margin-right: 70px ;
+}
+
+.box{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 340px);
+  /* grid-template-columns: repeat(auto-fill, 310px); */
+  /* gap: 20px; */
+  row-gap: 30px;
+  column-gap: 100px;
+  place-content: center;
+  margin-top: 30px;
+  align-items: auto;
+
+ /* padding: 0px 30px; */
+}
+
+/* .boxFilter{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 240px);
+  gap: 20px;
+  place-content: center;
+  margin-top: 30px;
+  align-content: center;
+} */
+
+mat-card{
+  width: 200px;
+}
+
+#imgUsuario{
+  height: 30px;
+  width: 30px;
+}
+
+.cards{
+  cursor: pointer;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+}
+
+.card{
+  cursor: pointer;
+  height: 80px;
+  width: 200px;
+  border: inset;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+  border-radius: 90px;
+}
+
+.card:hover{
+  transition: all 5s;
+  border: outset;
+  rotate: 20%;
+  background-color: antiquewhite;
+}
+
+.iconoInicial{
+  height: 500px;
+  width: 500px;
+}
+
+.cargando{
+  margin-left: 80px;
+}
+
+/* button {
+  width: 40px;
+} */
+
+mat-form-field{
+  width: 300px;
+}
+
+.contieneCards{
+
+  align-self: center;
+  justify-self: center;
+}
+
+.btn-flotante {
+	color: #ffffff; /* Color del texto */
+  height: 50px;
+  width: 50px;
+	letter-spacing: 2px; /* Espacio entre letras */
+	/* background-color: #409219; Color de fondo */
+	position: fixed;
+	bottom: 240px;
+	right: 40px;
+	transition: all 300ms ease 0ms;
+	z-index: 99;
+  padding: 0px;
+}
+.btn-flotante:hover {
+	background-color: #2c2fa5; /* Color de fondo al pasar el cursor */
+	box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.3);
+	transform: translateY(-7px);
+}
+@media only screen and (max-width: 600px) {
+ 	.btn-flotante {
+		bottom: 150px;
+		right: 20px;
+	}
+}
+
+/* span.mat-button-wrapper{
+  padding: 0px !important;
+} */
+
+/* .modal{
+  top: 200px;
+} */
+
+/* mat-stroked-button mat-flat-button{
+  padding: 10px;
+} */
+
+button.btn.btn-outline-warning {
+  position: relative ;
+  width: 60px;
+}
+
+/* button.mat-stroked-button {
+  position: relative ;
+} */
+
+button.mat-flat-button{
+  position: relative ;
+  width: 200px;
+  color: #000000;
+}
+
+._1rf5 {
+  display: block;
+  margin-bottom: 10px;
+  margin-left: 10.5%;
+  margin-right: 10.5%;
+  margin-top: 10px;
+  overflow: hidden;
+  text-align: center;
+  white-space: nowrap;
+  width: 79%;
+}
+._1rf5>span {
+  display: inline-block;
+  position: relative;
+}
+._1rf5>span:before {
+  margin-right: 15px;
+  right: 100%;
+}
+._1rf5>span:before, ._1rf5>span:after {
+  background: #ccd0d5;
+  content: '';
+  height: 1px;
+  position: absolute;
+  top: 50%;
+  width: 9999px;
+}
+._1rf5>span:after {
+  left: 100%;
+  margin-left: 15px;
+}
+._1rf8{
+  color: #ccd0d5;
+}
+/* ._1rf5>span:after {
+  background: #ccd0d5;
+  content: '';
+  height: 1px;
+  position: absolute;
+  top: 50%;
+  width: 9999px;
+} */
+button.btn.btn-outline-danger{
+  position: relative;
+  width: 50px;
+}
+
+button.mat-focus-indicator.mat-stepper-next.mat-button.mat-button-base{
+  position: relative;
+}
+
+button.mat-focus-indicator.mat-stepper-previous.mat-button.mat-button-base{
+  position: relative;
+}
+
+/* div.modal-dialog{
+  margin-top: 200px;
+}
+
+ngb-modal-window{
+  top: 200px;
+} */
+
+button.mat-focus-indicator.mat-raised-button.mat-button-base.mat-primary{
+  position: relative;
+}
+
+
+/* Camara */
+
+/* .screenshot-image {
+  width: 150px;
+  height: 90px;
+  border-radius: 4px;
+  border: 2px solid whitesmoke;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  position: absolute;
+  bottom: 5px;
+  left: 10px;
+  background: white;
+}
+
+.display-cover {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 70%;
+  margin: 5% auto;
+  position: relative;
+}
+
+video {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.video-options {
+  position: absolute;
+  left: 20px;
+  top: 30px;
+}
+
+.controls {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  display: flex;
+}
+
+.controls > button {
+  width: 45px;
+  height: 45px;
+  text-align: center;
+  border-radius: 100%;
+  margin: 0 6px;
+  background: transparent;
+}
+
+.controls > button:hover svg {
+  color: white !important;
+}
+
+@media (min-width: 300px) and (max-width: 400px) {
+  .controls {
+      flex-direction: column;
+  }
+
+  .controls button {
+      margin: 5px 0 !important;
+  }
+}
+
+.controls > button > svg {
+  height: 20px;
+  width: 18px;
+  text-align: center;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.controls button:nth-child(1) {
+  border: 2px solid #D2002E;
+}
+
+.controls button:nth-child(1) svg {
+  color: #D2002E;
+}
+
+.controls button:nth-child(2) {
+  border: 2px solid #008496;
+}
+
+.controls button:nth-child(2) svg {
+  color: #008496;
+}
+
+.controls button:nth-child(3) {
+  border: 2px solid #00B541;
+}
+
+.controls button:nth-child(3) svg {
+  color: #00B541;
+}
+
+.controls > button {
+  width: 45px;
+  height: 45px;
+  text-align: center;
+  border-radius: 100%;
+  margin: 0 6px;
+  background: transparent;
+}
+
+.controls > button:hover svg {
+  color: white;
+} */
+
+button.btn.actionBtn.play{
+  position: absolute;
+  width: 100px;
+  bottom: 20px;
+  left: 40%;
+
+}
+
+webcam{
+  height: 400px;
+ left: 0;
+}
+
+.snapshot{
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
+  /* width: 50px;
+  height: 50px; */
+  transform: scaleX(-1);
+}
+
+/* .imagensnapshot{
+   width: 180px;
+  height: 130px;
+} */
+
+#IcoCamara{
+  width: 40px;
+  height: 40px;
+}
+
+ .imagensnapshot{
+  width: 180px;
+  height: 130px;
+  border-radius: 4px;
+  border: 2px solid whitesmoke;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  bottom: 5px;
+  background: white;
+}
+
+button.btn.actionBtn.cambiacamara{
+ width: 50px;
+ height: 50px;
+ padding: 20px;
+}
+
+.CambiaCam{
+  height: 40px;
+  width: 40px;
+}
+
+button.mat-focus-indicator.mat-raised-button.mat-button-base{
+  position: relative;
+  width: 120px;
+}
+
+img.imgSubidaPorUser{
+  width: 300px;
+  height: 200px;
+  padding: 20px;
+  /* border: dashed #B5E5ED; */
+}
+
+
+/* div.modal-dialog{
+  top: 200px !important;
+}
+
+div.modal-content{
+  top: 200px !important;
+}
+
+ngb-modal-window.d-block.modal.fade.show{
+  top: 200px !important;
+} */
+
+img.imgSubidaPorUser.rainbow.mt-3{
+  border-style: dashed ;
+  border-color: #8aacc8 ;
+}

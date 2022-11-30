@@ -1,0 +1,43 @@
+
+<div class="container text-center">
+
+    <!-- <div class="container">
+      <div class="row">
+        <div class="col mt-3">
+
+          <app-busqueda></app-busqueda>
+
+         </div>
+       </div>
+
+    </div> -->
+
+<!-------------Prueba cambiando color de etiquetas por el secundary de la lista, tiene un estilo en el dark mode para adpatar el color-->
+
+    <div class="list-group list-reset">
+
+      <a
+      *ngFor="let item of colorlist"
+      [style.background-color] = "item.secondary"
+      (click)="buscar( item.nombre )"
+      class="list-group-item list-group-item-action Etiquetas"
+      id="item">
+      {{item.nombre}}
+    </a>
+    <br>
+
+      <!-- <hr> -->
+
+      <!-- <a  *ngFor="let item of historial"
+          (click)="buscar(item)"
+          class="list-group-item list-group-item-action historialEtiquetas">
+            {{ item | titlecase}}
+      </a> -->
+
+    </div>
+
+
+
+</div>
+
+

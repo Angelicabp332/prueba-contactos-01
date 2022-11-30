@@ -1,0 +1,120 @@
+.estanteria{
+  border: 20px groove #29b6f6;
+  width: 180px;
+  height: 206px;
+  background: #0086c3;
+  border-radius: 15px;
+  color: #FFFFFF;
+  align-content: center;
+  align-items: center;
+}
+.box{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 240px);
+  gap: 30px;
+  place-content: center;
+  margin-top: 20px;
+}
+.boxEstante{
+  display: grid;
+  gap: 30px;
+  place-content: center;
+}
+.boxList{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 150px);
+  gap: 30px;
+  place-content: center;
+  margin-top: 30px;
+}
+.divisorEstante{
+  border: 4px solid;
+  margin:0px;
+}
+.listaVertical{
+  list-style-type: none;
+}
+.listaVertical:hover{
+  filter: contrast(70%);
+
+}
+.iconosInTable:hover{
+  cursor: pointer;
+  background-color: #F1F1F1;
+  filter: blur(8);
+  /* box-shadow: 0 0 30px #e8f5e9; */
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+  border-radius: 90px;
+}
+.iconosInTable{
+  float:left;
+  border-radius: 15px;
+  transition: .5s;
+  /* margin: 8px; */
+}
+.listaVertical{
+  cursor: pointer;
+}
+.contieneEstanteria{
+  align-content: center;
+  align-items: center;
+  margin-left: 25px;
+}
+.libro1{
+  background: #455a64;
+  border: solid #000000;
+  height: 60px;
+  margin-right:4px;
+  margin-top : 0px;
+  margin-left: 2px;
+}
+.libro2{
+  background: #718792;
+  border: solid #000000;
+  margin-right:3px;
+}
+.divilibro{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 20px);
+  margin-left: 2px;
+  height:60px;
+  margin-top:0px;
+
+}
+.example-input-wrapper {
+  margin-bottom: 16px;
+}
+
+label {
+  margin-right: 4px;
+}
+.mat-radio-button ~ .mat-radio-button {
+  margin-left: 16px;
+}
+.cargandoDocs{
+  margin-top: 180px;
+}
+.iconoNotificacion{
+  margin-right: 90px;
+  margin-top:20px;
+}
+.itemOfSidenav:hover{
+  cursor:pointer;
+  text-decoration: none;
+}
+.itemOfSidenav{
+  text-decoration: none;
+  color: #000000;
+}
+.mat-icon {
+font-size: 27px;
+}
+mat-drawer-content{
+  background-color: #ffffff;
+}
+.mat-drawer.mat-drawer-end{
+  padding: 0px 70px !important;
+}
+.mat-drawer-container{
+  height: 100vh;
+}

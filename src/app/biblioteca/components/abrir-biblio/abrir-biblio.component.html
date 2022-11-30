@@ -1,0 +1,321 @@
+<div class="row text-center mt-2 contenedorInicialBliblio " >
+
+    <div class="col-md-3 ">
+      <div class="container " >
+
+          <div class="contieneEstanteria boxEstante">
+            <div class="estanteria mt-5"
+            [style.background-color]="terminonuevo[1].color">
+
+              <h3 class="mt-2"> {{terminonuevo}}</h3>
+              <hr class="divisorEstante">
+              <div class="divilibro col ">
+                <hr class="libro1">
+                <hr class="libro2">
+              </div>
+              <hr class="divisorEstante">
+            </div>
+          </div>
+
+        <div class="mt-5 boxList">
+          <li *ngFor="let item of tipos" class="listaVertical mb-4" (click)="onChangeCheckBox(item.nombre)">
+            <img class="bi me-2 iconoLibroLateral" width="90" height="90" role="img" src="../../../../assets/Ghenova/libro1Color.png">
+            <br>
+            <b>{{ item.nombre | titlecase}}</b>
+          </li>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="col">
+
+      <div class="d-flex justify-content-end iconoNotificacion" >
+              <button mat-icon-button (click)="drawer.toggle()" [matBadge]="asignacionCount" matBadgeColor="warn" matBadgeSize="small">
+                <mat-icon  class="mat-icon">person</mat-icon>
+              </button>
+      </div>
+
+      <div class=" filtradoPor mt-4">
+        <h5><b>Ordenar por:</b></h5>
+        <div>
+          <mat-radio-group [(ngModel)]="checkSeleccion">
+            <mat-radio-button *ngFor="let item of filtrarPor " style="margin: 15px"
+              (click)="onChangeCheckBox(item.nombre)">
+              <b> {{item.nombre }} </b>
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <hr><br>
+      </div>
+
+      <!-- <div class="image" style="height: 100vh;width:100vw;" [ngStyle]="{'background': 'url(/assets/Ghenova/cloud-dark.svg) no-repeat 0 0'}"></div> -->
+
+      <mat-drawer-container class="example-container " hasBackdrop = false autosize>
+        <mat-drawer #drawer mode = side id="drawer" position="end" class="d-flex drawer">
+          <h4>Asignaciones</h4><hr class="mb-5">
+
+          <div class="  list-group list-reset">
+            <ul *ngFor="let item of asignaciones;let i = index"
+                class=" list-group-item list-group-item-action animate__animated animate__fadeIn animate__delay-2s Listaitems " style="background-color: #ffecb3;"
+                id="{{item.nombre}}"
+                (click)="cuandohaceClick( item.nombre )"
+                (click)="modal.open(modalContentUsers)"
+                (click)="abierto(item.nombre, i)">
+              <!--   style="background-color: #ffecb3;"  -->
+              <a mat-list-item class="itemOfSidenav " >
+                {{item.nombre |titlecase}}
+              </a></ul>
+          </div>
+
+        </mat-drawer>
+        <mat-drawer-content>
+
+          <div class="col" *ngIf="(docsOfItem != 0); else loadingDocs" value="side" #mode #hasBackdrop >
+
+            <div class="box">
+                <div  *ngFor=" let item of docsOfItem" class="iconosInTable container mb-2" (click)="modal.open(modalContent)"
+                  (click)="cuandohaceClick( item )"><br>
+                  <img class="bi me-2 iconoLibro" width="100" height="100" role="img"
+                    src="../../../../assets/Ghenova/libro2Color.png">
+                  <br><b>{{ item | titlecase}}</b>
+                  <br><br>
+                </div>
+            </div>
+          </div>
+
+        </mat-drawer-content>
+      </mat-drawer-container>
+
+    </div>
+
+    <!---spinner antes de cargar los documentos-->
+    <ng-template #loadingDocs >
+      <div class="text-center cargandoDocs">
+        <img class="bi me-2 " width="120" height="120" role="img"
+          src="../../../../assets/Ghenova/Ellipsis-1s-200px.svg"> <br/>
+      </div>
+    </ng-template>
+
+  <!----(click)="modal.open(modalContent)"     funcionalidad del modal content-->
+
+  <!----dialog del usuario administrador-->
+  <div class="MostrarEvento">
+    <ng-template #modalContent let-close="close" class="MostrarEvento">
+      <div class="modal-header">
+
+        <h5 class="modal-title"> <img class="bi me-2 " width="50" height="50" role="img"
+          src="../../../../assets/Ghenova/expediente.png"> {{tituloDoc | uppercase}}</h5>
+        <button type="button" class="btn btn-outline-danger close" (click)="close()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div>
+          Informacion documento: <br />
+          <hr>
+          <p><b>Nombre:</b> {{ tituloDoc }}</p>
+          <p><b>Categoria:</b> {{ categoria  }}</p>
+          <p><b>Prioridad:</b> {{ prioridad }}</p>
+          <p><b>Asignado a: </b><br><br>
+
+            <mat-chip-list >
+              <mat-chip *ngFor="let item of verSeleccion"
+                        (removed)="remove(item)">
+                        <!-- [disabled]="item" -->
+                {{item}}
+                <button matChipRemove>
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </mat-chip>
+            </mat-chip-list>
+          </p>
+
+          <button type="button" class="btn btn-outline-warning mt-3 mb-3" (click)="modal.open(EditarDoc)">
+            Editar Info
+          </button>
+
+        </div>
+      </div>
+
+      <div class="modal-footer d-flex">
+
+        <div class="d-flex justify-content-start col-md-10">
+          <div class="justify-content-start">
+            <h6><b> Asignar a: </b></h6>
+            <select class="form-select opcionesDelPersonal" id="opcionesDelPersonal"
+                    [(ngModel)]="opcionSeleccionado"
+                   (ngModelChange)="onChangeCapturar($event)">
+              <option *ngFor="let persona of personalList ; let i = index"
+              [disabled]="!persona.estado"
+                       >{{persona.nombre}}</option>
+                       <!-- [disabled]="verSeleccion.length != 0" -->
+            </select>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end">
+          <button type="button" class="btn btn-outline-danger" (click)="close()">
+            OK
+          </button>
+        </div>
+
+      </div>
+
+    </ng-template>
+  </div>
+
+   <!----------------------Editar informacion de documentos------------------------------------------->
+  <div class="EditarDoc">
+    <ng-template #EditarDoc let-close="close" class="EditarDoc">
+      <div class="modal-header">
+
+        <h5 class="modal-title "> <img class="bi me-2 " width="50" height="50" role="img"
+          src="../../../../assets/Ghenova/editar.png"> {{tituloDoc | uppercase}}</h5>
+        <button type="button" class="btn btn-outline-danger close " (click)="close()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div>
+          <mat-vertical-stepper [linear]="false" #stepper>
+            <mat-step >
+
+                <ng-template matStepLabel>Editar Nombre</ng-template>
+                <mat-form-field>
+                  <input matInput
+                        autocomplete="off"
+                        placeholder="Nombre del documento "
+                        [(ngModel)]="nombre"
+                        (ngModelChange)="onChangeCambiosNombre($event)"
+                        >
+                </mat-form-field>
+                <div>
+                  <button mat-button matStepperNext>Next</button>
+                </div>
+
+            </mat-step>
+            <mat-step >
+                <ng-template matStepLabel>Editar Tema</ng-template>
+                <mat-form-field>
+                  <input matInput placeholder="Tema"
+                         autocomplete="off"
+                         [(ngModel)]="tema"
+                         (ngModelChange)="onChangeCambiosTema($event)"
+                         >
+                </mat-form-field>
+                <div>
+                  <button mat-button matStepperPrevious>Back</button>
+                  <button mat-button matStepperNext>Next</button>
+                </div>
+
+            </mat-step>
+            <mat-step>
+                <ng-template matStepLabel>Editar Prioridad</ng-template>
+                <mat-radio-group [(ngModel)]="prioridad"
+                                  (ngModelChange)="onChangeCambiosPrioridad($event)"
+                                  >
+                  <mat-radio-button value="alta">Alta </mat-radio-button>
+                  <mat-radio-button value="media">Media </mat-radio-button>
+                  <mat-radio-button value="baja">Baja </mat-radio-button>
+                </mat-radio-group>
+                <div><br>
+                  <button mat-button matStepperPrevious>Back</button>
+                  <button mat-button matStepperNext>Next</button>
+                </div>
+            </mat-step>
+            <mat-step>
+              <ng-template matStepLabel>Editar Categoria</ng-template>
+              <mat-radio-group [(ngModel)]="categoria"
+                                (ngModelChange)="onChangeCambiosCategoria($event)"
+                                >
+                <mat-radio-button value="naval">Naval </mat-radio-button>
+                <mat-radio-button value="energia">Energia </mat-radio-button>
+                <mat-radio-button value="ia">IA </mat-radio-button>
+                <mat-radio-button value="marketing">Marketing </mat-radio-button>
+                <mat-radio-button value="i+d">I+D </mat-radio-button>
+                <mat-radio-button value="agro">Agro </mat-radio-button>
+                <mat-radio-button value="financiacion">Financiacion </mat-radio-button>
+                <mat-radio-button value="cloud">Cloud </mat-radio-button>
+              </mat-radio-group>
+              <div><br>
+                <button mat-button matStepperPrevious>Back</button>
+              </div>
+          </mat-step>
+          </mat-vertical-stepper>
+
+        </div>
+
+      </div>
+
+      <div class="modal-footer d-flex">
+
+        <div class="d-flex justify-content-end">
+          <button type="button" class="btn btn-outline-danger" (click)="close()">
+            OK
+          </button>
+        </div>
+
+      </div>
+
+    </ng-template>
+  </div>
+
+
+  <!----------------------Dialog para usuarios corrientes -->
+  <div class="MostrarEvento">
+    <ng-template #modalContentUsers let-close="close" class="MostrarEvento">
+      <div class="modal-header">
+
+        <h5 class="modal-title"> <img class="bi me-2 " width="50" height="50" role="img"
+          src="../../../../assets/Ghenova/expediente.png"> {{tituloDoc | uppercase}}</h5>
+        <button type="button" class="btn btn-outline-danger close" (click)="close()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div>
+          Informacion documento: <br />
+          <hr>
+          <p><b>Nombre:</b> {{ tituloDoc }}</p>
+          <p><b>Categoria:</b> {{ categoria  }}</p>
+          <p><b>Prioridad:</b> {{ prioridad }}</p>
+          <p><b>Asignado: </b>{{ misAsignaciones }} </p>
+        </div><br>
+        <p><mat-checkbox [(ngModel)]="estadoLeido" (ngModelChange)="onChangeLeido($event)">
+          <b>Leido</b>
+        </mat-checkbox>
+      </p>
+      </div>
+
+      <div class="modal-footer d-flex" >
+
+        <div class="d-flex justify-content-start col-md-10" *ngIf="(misAsignaciones == 0)" >
+
+          <div id="botonAceptaryRechazar">
+
+            <button type="button" class="btn btn-primary" (click)="aceptarorechazarDoc(true)" >
+              Aceptar
+            </button>
+
+            <button type="button" style="margin-left: 10px" class="btn btn-danger" (click)="aceptarorechazarDoc(false)">
+              Rechazar
+            </button>
+
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end">
+          <button type="button" class="btn btn-outline-danger" (click)="close()" >
+            OK
+          </button>
+        </div>
+
+      </div>
+
+    </ng-template>
+  </div>
+
+
+</div>
+
